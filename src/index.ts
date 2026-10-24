@@ -16,6 +16,8 @@ async function waitForElement(selector: string): Promise<Element> {
   throw new Error(`Element with selector "${selector}" not found`);
 }
 
+let lastUserList: string[] | null = null;
+
 void (async () => {
   console.log(PREFIX + "Waiting for toRegExp function...");
   for (let i = 0; i < 100; i++) {
@@ -148,6 +150,10 @@ void (async () => {
     const presetInput = dialog.querySelector(
       "#ascf-presetInput",
     ) as HTMLInputElement;
+    const userList = dialog.querySelector(
+      "#ascf-userList",
+    ) as HTMLTextAreaElement;
+    userList.value = lastUserList ? lastUserList.join("\n") : "";
 
     saveButton.addEventListener("click", () => {
       const presetName = presetInput.value.trim();
@@ -184,6 +190,7 @@ void (async () => {
       if (userList.length > 0) {
         const pattern = MAGIC + JSON.stringify(userList);
         const input = element.querySelector("#input-user") as HTMLInputElement;
+        lastUserList = userList;
         input.value = pattern;
         input.dispatchEvent(new Event("input", { bubbles: true }));
       }
