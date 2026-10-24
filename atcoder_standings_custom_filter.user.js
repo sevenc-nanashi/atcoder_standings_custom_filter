@@ -1,19 +1,19 @@
 // ==UserScript==
-// @name         AtCoder Standings Custom Filter
-// @version      0.1.2
+// @name       AtCoder Standings Custom Filter
+// @version    0.1.3
 // @author
-// @license      ISC
-// @updateURL    https://raw.githubusercontent.com/sevenc-nanashi/atcoder_standings_custom_filter/built/atcoder_standings_custom_filter.user.js
-// @match        https://atcoder.jp/contests/*/standings*
-// @sandbox      raw
-// @inject-into  page
+// @license    ISC
+// @updateURL  https://raw.githubusercontent.com/sevenc-nanashi/atcoder_standings_custom_filter/built/atcoder_standings_custom_filter.user.js
+// @match      https://atcoder.jp/contests/*/standings*
+// @sandbox    raw
+// @grant      unsafeWindow
 // ==/UserScript==
 
 (function() {
 	"use strict";
 	var PREFIX = "[AtCoder Standings Custom Filter] ";
 	var MAGIC = "ASCF:";
-	var _global = globalThis;
+	var _global = unsafeWindow || globalThis;
 	async function waitForElement(selector) {
 		for (let i = 0; i < 100; i++) {
 			const element = document.querySelector(selector);
