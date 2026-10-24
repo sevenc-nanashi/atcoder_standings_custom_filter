@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AtCoder Standings Custom Filter
-// @version      0.1.0
+// @version      0.1.1
 // @author
 // @license      ISC
 // @updateURL    https://raw.githubusercontent.com/sevenc-nanashi/atcoder_standings_custom_filter/built/atcoder_standings_custom_filter.user.js
@@ -21,15 +21,25 @@
 		}
 		throw new Error(`Element with selector "${selector}" not found`);
 	}
-	console.log(PREFIX + "Monkey patching toRegExp function to support ASCF: prefix for user lists");
-	var originalToRegexp = _global.toRegExp;
-	var MAGIC = "ASCF:";
-	_global.toRegExp = function(pattern) {
-		if (pattern.startsWith(MAGIC)) {
-			const combinedPattern = `^(${JSON.parse(pattern.slice(5)).map((item) => item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})$`;
-			return new RegExp(combinedPattern, "i");
-		} else return originalToRegexp(pattern);
-	};
+	(async () => {
+		console.log(PREFIX + "Waiting for toRegExp function...");
+		for (let i = 0; i < 100; i++) {
+			if (typeof _global.toRegExp !== "function") {
+				await new Promise((resolve) => setTimeout(resolve, 100));
+				continue;
+			}
+			console.log(PREFIX + "Monkey patching toRegExp function to support ASCF: prefix for user lists");
+			const originalToRegexp = _global.toRegExp;
+			const MAGIC = "ASCF:";
+			_global.toRegExp = function(pattern) {
+				if (pattern.startsWith(MAGIC)) {
+					const combinedPattern = `^(${JSON.parse(pattern.slice(5)).map((item) => item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})$`;
+					return new RegExp(combinedPattern, "i");
+				} else return originalToRegexp(pattern);
+			};
+			break;
+		}
+	})();
 	(async () => {
 		console.log(PREFIX + "Waiting for standings panel heading...");
 		const element = await waitForElement("#standings-panel-heading .form-filter ");
