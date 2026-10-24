@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AtCoder Standings Custom Filter
-// @version      0.1.1
+// @version      0.1.2
 // @author
 // @license      ISC
 // @updateURL    https://raw.githubusercontent.com/sevenc-nanashi/atcoder_standings_custom_filter/built/atcoder_standings_custom_filter.user.js
@@ -12,6 +12,7 @@
 (function() {
 	"use strict";
 	var PREFIX = "[AtCoder Standings Custom Filter] ";
+	var MAGIC = "ASCF:";
 	var _global = globalThis;
 	async function waitForElement(selector) {
 		for (let i = 0; i < 100; i++) {
@@ -30,7 +31,6 @@
 			}
 			console.log(PREFIX + "Monkey patching toRegExp function to support ASCF: prefix for user lists");
 			const originalToRegexp = _global.toRegExp;
-			const MAGIC = "ASCF:";
 			_global.toRegExp = function(pattern) {
 				if (pattern.startsWith(MAGIC)) {
 					const combinedPattern = `^(${JSON.parse(pattern.slice(5)).map((item) => item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})$`;
