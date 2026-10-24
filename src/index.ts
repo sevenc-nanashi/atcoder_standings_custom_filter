@@ -14,24 +14,34 @@ async function waitForElement(selector: string): Promise<Element> {
   throw new Error(`Element with selector "${selector}" not found`);
 }
 
-console.log(
-  PREFIX +
-    "Monkey patching toRegExp function to support ASCF: prefix for user lists",
-);
-const originalToRegexp = _global.toRegExp;
-const MAGIC = "ASCF:";
-_global.toRegExp = function (pattern: string): RegExp {
-  if (pattern.startsWith(MAGIC)) {
-    const users = JSON.parse(pattern.slice(MAGIC.length)) as string[];
-    const escapedList = users.map((item) =>
-      item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+void (async () => {
+  console.log(PREFIX + "Waiting for toRegExp function...");
+  for (let i = 0; i < 100; i++) {
+    if (typeof _global.toRegExp !== "function") {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      continue;
+    }
+    console.log(
+      PREFIX +
+        "Monkey patching toRegExp function to support ASCF: prefix for user lists",
     );
-    const combinedPattern = `^(${escapedList.join("|")})$`;
-    return new RegExp(combinedPattern, "i");
-  } else {
-    return originalToRegexp(pattern);
+    const originalToRegexp = _global.toRegExp;
+    const MAGIC = "ASCF:";
+    _global.toRegExp = function (pattern: string): RegExp {
+      if (pattern.startsWith(MAGIC)) {
+        const users = JSON.parse(pattern.slice(MAGIC.length)) as string[];
+        const escapedList = users.map((item) =>
+          item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        );
+        const combinedPattern = `^(${escapedList.join("|")})$`;
+        return new RegExp(combinedPattern, "i");
+      } else {
+        return originalToRegexp(pattern);
+      }
+    };
+    break;
   }
-};
+})();
 
 type Presets = Record<string, string[]>;
 
