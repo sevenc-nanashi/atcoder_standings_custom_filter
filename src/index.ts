@@ -1,4 +1,5 @@
 const PREFIX = "[AtCoder Standings Custom Filter] ";
+const MAGIC = "ASCF:";
 const _global = globalThis as unknown as {
   toRegExp: (pattern: string) => RegExp;
 };
@@ -26,7 +27,6 @@ void (async () => {
         "Monkey patching toRegExp function to support ASCF: prefix for user lists",
     );
     const originalToRegexp = _global.toRegExp;
-    const MAGIC = "ASCF:";
     _global.toRegExp = function (pattern: string): RegExp {
       if (pattern.startsWith(MAGIC)) {
         const users = JSON.parse(pattern.slice(MAGIC.length)) as string[];
