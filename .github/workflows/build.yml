@@ -23,7 +23,6 @@ jobs:
       - name: Install dependencies
         run: |
           aube install
-          aube install -C worker
 
       - name: Update package.json
         run: |
