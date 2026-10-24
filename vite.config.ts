@@ -12,7 +12,7 @@ export default defineConfig({
         match: ["https://atcoder.jp/contests/*/standings*"],
         updateURL:
           "https://raw.githubusercontent.com/sevenc-nanashi/atcoder_standings_custom_filter/built/atcoder_standings_custom_filter.user.js",
-        "inject-into": "page",
+        // "inject-into": "page",
         sandbox: "raw",
       },
     }),

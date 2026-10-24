@@ -1,6 +1,7 @@
 const PREFIX = "[AtCoder Standings Custom Filter] ";
 const MAGIC = "ASCF:";
-const _global = globalThis as unknown as {
+// @ts-expect-error TamperMonkeyではunsafeWindowが使えるはず
+const _global = (unsafeWindow || globalThis) as unknown as {
   toRegExp: (pattern: string) => RegExp;
 };
 
