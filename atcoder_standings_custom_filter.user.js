@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name       AtCoder Standings Custom Filter
-// @version    0.1.3
+// @version    0.1.4
 // @author
 // @license    ISC
 // @updateURL  https://raw.githubusercontent.com/sevenc-nanashi/atcoder_standings_custom_filter/built/atcoder_standings_custom_filter.user.js
@@ -22,6 +22,7 @@
 		}
 		throw new Error(`Element with selector "${selector}" not found`);
 	}
+	var lastUserList = null;
 	(async () => {
 		console.log(PREFIX + "Waiting for toRegExp function...");
 		for (let i = 0; i < 100; i++) {
@@ -118,6 +119,8 @@
 			updatePresetList();
 			const saveButton = dialog.querySelector("#ascf-saveButton");
 			const presetInput = dialog.querySelector("#ascf-presetInput");
+			const userList = dialog.querySelector("#ascf-userList");
+			userList.value = lastUserList ? lastUserList.join("\n") : "";
 			saveButton.addEventListener("click", () => {
 				const presetName = presetInput.value.trim();
 				if (presetName.length === 0) {
@@ -144,6 +147,7 @@
 				if (userList.length > 0) {
 					const pattern = MAGIC + JSON.stringify(userList);
 					const input = element.querySelector("#input-user");
+					lastUserList = userList;
 					input.value = pattern;
 					input.dispatchEvent(new Event("input", { bubbles: true }));
 				}
