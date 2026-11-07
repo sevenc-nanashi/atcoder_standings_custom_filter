@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name       AtCoder Standings Custom Filter
-// @version    0.1.4
+// @version    0.1.5
 // @author
 // @license    ISC
 // @updateURL  https://raw.githubusercontent.com/sevenc-nanashi/atcoder_standings_custom_filter/built/atcoder_standings_custom_filter.user.js
@@ -55,7 +55,7 @@
 			dialog.style.padding = "20px";
 			dialog.style.borderRadius = "8px";
 			dialog.style.border = "1px solid #ccc";
-			dialog.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+			dialog.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
 			dialog.innerHTML = `
       <h3>AtCoder Standings Custom Filter</h3>
       <p>ユーザー名を1行ずつ入力してください。</p>
@@ -74,6 +74,12 @@
       <div style="width: 100%; margin-top: 10px; gap: 2px; display: grid; grid-template-columns: 1fr auto auto;" id="ascf-presetList">
       </div>
     `;
+			const cancelButton = dialog.querySelector("#ascf-cancelButton");
+			const okButton = dialog.querySelector("#ascf-okButton");
+			const userListTextarea = dialog.querySelector("#ascf-userList");
+			const saveButton = dialog.querySelector("#ascf-saveButton");
+			const presetInput = dialog.querySelector("#ascf-presetInput");
+			const userList = dialog.querySelector("#ascf-userList");
 			function updatePresetList() {
 				const presetList = dialog.querySelector("#ascf-presetList");
 				presetList.innerHTML = "";
@@ -94,6 +100,7 @@
 					loadButton.addEventListener("click", () => {
 						const userListTextarea = dialog.querySelector("#ascf-userList");
 						userListTextarea.value = users.join("\n");
+						presetInput.value = name;
 					});
 					const deleteButton = document.createElement("button");
 					deleteButton.textContent = "削除";
@@ -113,13 +120,7 @@
 			}
 			document.body.appendChild(dialog);
 			dialog.showModal();
-			const cancelButton = dialog.querySelector("#ascf-cancelButton");
-			const okButton = dialog.querySelector("#ascf-okButton");
-			const userListTextarea = dialog.querySelector("#ascf-userList");
 			updatePresetList();
-			const saveButton = dialog.querySelector("#ascf-saveButton");
-			const presetInput = dialog.querySelector("#ascf-presetInput");
-			const userList = dialog.querySelector("#ascf-userList");
 			userList.value = lastUserList ? lastUserList.join("\n") : "";
 			saveButton.addEventListener("click", () => {
 				const presetName = presetInput.value.trim();
@@ -140,6 +141,11 @@
 			cancelButton.addEventListener("click", () => {
 				dialog.close();
 				document.body.removeChild(dialog);
+			});
+			dialog.addEventListener("click", (event) => {
+				if (event.target !== dialog) return;
+				const bounds = dialog.getBoundingClientRect();
+				if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) cancelButton.click();
 			});
 			okButton.addEventListener("click", (e) => {
 				e.preventDefault();
