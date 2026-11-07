@@ -87,6 +87,25 @@ void (async () => {
       </div>
     `;
 
+    const cancelButton = dialog.querySelector(
+      "#ascf-cancelButton",
+    ) as HTMLButtonElement;
+    const okButton = dialog.querySelector(
+      "#ascf-okButton",
+    ) as HTMLButtonElement;
+    const userListTextarea = dialog.querySelector(
+      "#ascf-userList",
+    ) as HTMLTextAreaElement;
+    const saveButton = dialog.querySelector(
+      "#ascf-saveButton",
+    ) as HTMLButtonElement;
+    const presetInput = dialog.querySelector(
+      "#ascf-presetInput",
+    ) as HTMLInputElement;
+    const userList = dialog.querySelector(
+      "#ascf-userList",
+    ) as HTMLTextAreaElement;
+
     function updatePresetList() {
       const presetList = dialog.querySelector(
         "#ascf-presetList",
@@ -111,6 +130,8 @@ void (async () => {
             "#ascf-userList",
           ) as HTMLTextAreaElement;
           userListTextarea.value = users.join("\n");
+
+          presetInput.value = name;
         });
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "削除";
@@ -132,27 +153,7 @@ void (async () => {
     document.body.appendChild(dialog);
     dialog.showModal();
 
-    const cancelButton = dialog.querySelector(
-      "#ascf-cancelButton",
-    ) as HTMLButtonElement;
-    const okButton = dialog.querySelector(
-      "#ascf-okButton",
-    ) as HTMLButtonElement;
-    const userListTextarea = dialog.querySelector(
-      "#ascf-userList",
-    ) as HTMLTextAreaElement;
-
     updatePresetList();
-
-    const saveButton = dialog.querySelector(
-      "#ascf-saveButton",
-    ) as HTMLButtonElement;
-    const presetInput = dialog.querySelector(
-      "#ascf-presetInput",
-    ) as HTMLInputElement;
-    const userList = dialog.querySelector(
-      "#ascf-userList",
-    ) as HTMLTextAreaElement;
     userList.value = lastUserList ? lastUserList.join("\n") : "";
 
     saveButton.addEventListener("click", () => {
