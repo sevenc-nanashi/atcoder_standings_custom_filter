@@ -67,7 +67,7 @@ void (async () => {
     dialog.style.padding = "20px";
     dialog.style.borderRadius = "8px";
     dialog.style.border = "1px solid #ccc";
-    dialog.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
+    dialog.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.5)";
     dialog.innerHTML = `
       <h3>AtCoder Standings Custom Filter</h3>
       <p>ユーザー名を1行ずつ入力してください。</p>
@@ -179,6 +179,19 @@ void (async () => {
     cancelButton.addEventListener("click", () => {
       dialog.close();
       document.body.removeChild(dialog);
+    });
+
+    dialog.addEventListener("click", (event) => {
+      if (event.target !== dialog) return;
+      const bounds = dialog.getBoundingClientRect();
+      if (
+        event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom
+      ) {
+        cancelButton.click();
+      }
     });
 
     okButton.addEventListener("click", (e) => {
